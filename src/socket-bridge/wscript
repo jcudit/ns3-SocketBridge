@@ -1,0 +1,48 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+# def options(opt):
+#     pass
+
+# def configure(conf):
+#     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
+
+def build(bld):
+    module = bld.create_ns3_module('socket-bridge', ['network', 'internet'])
+    module.source = [
+        'model/socket-bridge.cc',
+        'model/socket-channel.cc',
+        'model/socket-null-mac.cc',
+        'model/socket-phy.cc',
+        'model/socket-contiki-phy.cc',
+#        'model/interference-helper.cc',
+        'helper/socket-bridge-helper.cc',
+        'helper/socket-channel-helper.cc',
+        'helper/socket-contiki-phy-helper.cc',
+        'helper/socket-null-mac-helper.cc'
+        ]
+
+    module_test = bld.create_ns3_module_test_library('socket-bridge')
+    module_test.source = [
+        'test/socket-bridge-test-suite.cc',
+        ]
+
+    headers = bld.new_task_gen(features=['ns3header'])
+    headers.module = 'socket-bridge'
+    headers.source = [
+        'model/socket-bridge.h',
+        'model/socket-channel.h',
+        'model/socket-null-mac.h',
+        'model/socket-phy.h',
+        'model/socket-contiki-phy.h',
+#        'model/interference-helper.h',
+        'helper/socket-bridge-helper.h',
+        'helper/socket-channel-helper.h',
+        'helper/socket-contiki-phy-helper.h',
+        'helper/socket-null-mac-helper.h'
+        ]
+
+    if bld.env.ENABLE_EXAMPLES:
+        bld.add_subdirs('examples')
+
+    # bld.ns3_python_bindings()
+
